@@ -9,23 +9,14 @@ import Logo from "./Assets/png_style.svg";
 import firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
-
+import firebaseConfig from "./firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollectinData } from "react-firebase-hooks/firestore";
 
 const uuid = require("uuid");
 const syllable = require("syllable");
 
-firebase.initializeApp({
-  apiKey: "AIzaSyA4MXsbkGLcs921XbDX89w8USLYFy90Meg",
-  authDomain: "astro-7.firebaseapp.com",
-  databaseURL: "https://astro-7.firebaseio.com",
-  projectId: "astro-7",
-  storageBucket: "astro-7.appspot.com",
-  messagingSenderId: "646788483761",
-  appId: "1:646788483761:web:e202af8abcfdd195dcf090",
-  measurementId: "G-9JJXXZWQXC",
-});
+firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
@@ -90,6 +81,7 @@ function App() {
         })
       );
   };
+
   const renderElement = useCallback(({ attributes, children, element }) => {
     return (
       <div className="line" {...attributes}>
@@ -98,6 +90,7 @@ function App() {
       </div>
     );
   }, []);
+
   let signInPage = new SignIn();
   let [page, updatePage] = useState(
     <div className="signInPage">
