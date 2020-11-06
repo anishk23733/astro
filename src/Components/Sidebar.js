@@ -3,14 +3,41 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-function SidebarItem({ label, items, depthStep = 10, depth = 0, ...rest }) {
+import firebase from "firebase";
+import "firebase/firestore";
+import "firebase/auth";
+import firebaseConfig from "../firebase.config";
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
+function SidebarItem({
+  label,
+  specialVal,
+  items,
+  depthStep = 10,
+  depth = 0,
+  ...rest
+}) {
   return (
     <>
-      <ListItem button dense {...rest}>
-        <ListItemText style={{ paddingLeft: depth * depthStep }}>
-          <span>{label}</span>
-        </ListItemText>
-      </ListItem>
+      {specialVal == "logout" ? (
+        <ListItem button dense {...rest} onClick={() => auth.signOut()}>
+          <ListItemText style={{ paddingLeft: depth * depthStep }}>
+            <span>{label}</span>
+          </ListItemText>
+        </ListItem>
+      ) : (
+        <ListItem button dense {...rest}>
+          <ListItemText style={{ paddingLeft: depth * depthStep }}>
+            <span>{label}</span>
+          </ListItemText>
+        </ListItem>
+      )}
       {/* Recursion  */}
       {Array.isArray(items) ? (
         <List disablePadding dense>
@@ -35,6 +62,7 @@ function Sidebar({ items, depthStep, depth }) {
         {items.map((sidebarItem, index) => (
           <SidebarItem
             key={`${sidebarItem.name}${index}`}
+            specialVal={sidebarItem.name}
             depthStep={depthStep}
             depth={depth}
             {...sidebarItem}

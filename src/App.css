@@ -12,8 +12,27 @@
 }
 
 @font-face {
-  font-family: Custom;
-  src: url(Assets/Zeniq.ttf);
+  font-family: Lequire;
+  src: url(Assets/lequire/Lequire.otf);
+}
+@font-face {
+  font-family: BuffalordGradient;
+  src: url(Assets/buffalord/BuffalordDemoGradient.ttf);
+}
+@font-face {
+  font-family: Buffalord;
+  src: url(Assets/buffalord/BuffalordDemoRegular.ttf);
+}
+.lequire {
+  font-family: Lequire;
+}
+.buffalord {
+  font-family: Buffalord;
+  font-size: 1.5em;
+}
+.buffalord-g {
+  font-family: BuffalordGradient;
+  font-size: 1.5em;
 }
 
 .sideBarContainer {
@@ -25,10 +44,12 @@
 }
 
 .container {
-  padding: 3em;
+  padding: 3em 1em 3em 3em;
   display: flex;
+  flex-grow: 1;
   /* flex-direction: row; */
   flex-wrap: nowrap;
+  overflow: scroll;
 }
 
 *:focus {
@@ -39,17 +60,17 @@
   min-height: 100vh;
   max-height: 100vh;
   overflow: hidden;
-  /* background-image: linear-gradient(120deg, #fd3a84 0%, #ffa68d 100%); */
+  background-image: linear-gradient(120deg, #fd3a84 0%, #ffa68d 100%);
 }
 
 .signInContainer {
-  /* box-shadow: 0px 0px 40px -9px rgba(0, 0, 0, 0.29); */
+  box-shadow: 0px 0px 40px -9px rgba(0, 0, 0, 0.29);
   text-align: center;
   background-color: white;
   min-width: 17em;
-  max-width: 17em;
+  max-width: 25em;
   margin: auto;
-  margin-top: 2em;
+  margin-top: 10vh;
   padding: 4rem;
   border-radius: 0.5rem;
 }
@@ -59,10 +80,36 @@
   display: flex;
   flex-direction: column;
 }
-.signInForm input,
-button {
-  padding: 0.5em;
+.signInForm input {
+  padding: 1em;
   margin: 0.5em;
+  /* border-radius: 1em; */
+  border: 2px solid rgb(230, 230, 230);
+  transition: border 0.2s linear, border-radius 0.2s linear;
+}
+.signInForm input:focus {
+  border: 2px solid rgb(230, 230, 230);
+}
+
+.loginButtonContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+}
+.loginButtonContainer button {
+  flex-grow: 1;
+  border: 20px;
+  background-color: rgb(218, 218, 218);
+  padding: 0.75em;
+  margin: 0.5em;
+  border-radius: 0.1em;
+  transition: background-color 0.3s linear, transform 0.3s linear,
+    box-shadow 0.3s linear;
+}
+.loginButtonContainer button:hover {
+  background-color: rgb(228, 228, 228);
+  transform: translateY(-1px);
+  /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); */
 }
 
 a {
@@ -72,7 +119,6 @@ a {
 
 .signInContainer h1 {
   margin-top: 1rem;
-  font-family: Custom;
   font-size: 2.5rem;
   background: -webkit-linear-gradient(#fd3a84 0%, #ffa68d);
   -webkit-background-clip: text;
@@ -87,13 +133,10 @@ a {
 }
 
 .rhymeContainer {
-  padding: 1em;
-  padding-top: 1.5em;
-  max-width: 40%;
+  padding: 3em 3em 3em 1em;
+  max-width: 30%;
   text-align: left;
-  max-height: 77.5vh;
-  /* overscroll-behavior: contain; */
-  /* background-color: black; */
+  /* max-height: 77.5vh; */
   margin-left: auto;
   overflow: scroll;
   /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), w0 3px 6px rgba(0, 0, 0, 0.23); */
@@ -171,7 +214,7 @@ a {
 .emptyLine {
   background-color: rgb(0, 0, 0);
   width: 100%; /* or whatever width you want. */
-  height: 0.1em;
+  height: 2px;
   display: inline-block;
   /* padding: 0em 0.5em 0em 0.5em; */
   margin-bottom: 0em;

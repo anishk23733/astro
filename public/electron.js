@@ -8,14 +8,14 @@ function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   // Create the browser window.
   let [newWidth, newHeight] = [
-    Math.floor(0.5 * width) > 750 ? Math.floor(0.5 * width) : 750,
-    Math.floor(0.75 * height) > 600 ? Math.floor(0.75 * height) : 600,
+    Math.floor(0.75 * width) > 800 ? Math.floor(0.75 * width) : 800,
+    Math.floor(0.75 * height) > 700 ? Math.floor(0.75 * height) : 700,
   ];
   mainWindow = new BrowserWindow({
     width: newWidth,
     height: newHeight,
-    minHeight: 600,
-    minWidth: 750,
+    minWidth: newWidth,
+    minHeight: newHeight,
     titleBarStyle: "hiddenInset",
     resizable: true,
     webPreferences: {
