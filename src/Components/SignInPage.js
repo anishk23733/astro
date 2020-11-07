@@ -24,7 +24,20 @@ function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
   let [username, updateUsername] = useState("");
   let [password, updatePassword] = useState("");
   let [errorText, updateErrorText] = useState("");
-
+  let onKeyUp = (evt) => {
+    if (evt.key === "Enter") {
+      auth
+        .signInWithEmailAndPassword(username, password)
+        .then((res) => {
+          if (res.user) {
+            console.log();
+          }
+        })
+        .catch((error) => {
+          updateErrorText(error.message);
+        });
+    }
+  };
   return (
     <div className="signInPage">
       <div className="signInContainer">
@@ -35,9 +48,10 @@ function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
           <span className="buffalord">o</span>
         </h1>
         <div>
-          <p>Welcome back!</p>
+          {/* <p>Welcome back!</p> */}
           <div className="signInForm">
             <input
+              onKeyPress={onKeyUp}
               placeholder="Email"
               value={username}
               onChange={(event) => {
@@ -45,6 +59,7 @@ function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
               }}
             ></input>
             <input
+              onKeyPress={onKeyUp}
               type="password"
               placeholder="Password"
               value={password}

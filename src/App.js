@@ -108,9 +108,8 @@ function App() {
               onChange={(newValue) => {
                 if (editor.getFragment()[0] !== undefined) {
                   let highlighted = editor.getFragment()[0].children[0].text;
-                  if (highlighted.length > 0)
-                    console.log(searchRhymes(highlighted));
-                  console.log(JSON.stringify(newValue));
+                  if (highlighted.length > 0) searchRhymes(highlighted);
+                  // console.log(JSON.stringify(newValue));
                   setValue(newValue);
                   let i;
                   for (i = 0; i < newValue.length; i++) {
