@@ -29,18 +29,30 @@ function SidebarItem({
   modify,
   dbRef,
   setSongID,
+  setTitle,
   specialVal,
   ...rest
 }) {
   const [text, setText] = useState(name);
   const handleTextUpdate = (current) => {
     setText(current);
-    // dbRef.doc("sidebar").update({
-    //   items: firebase.firestore.FieldValue.arrayUnion({
-    //     id: title,
-    //     name: current,
-    //   }),
-    // });
+    dbRef
+      .doc("sidebar")
+      .get()
+      .then((res) => {
+        let copy = res.data().items;
+        // console.log(copy);
+        let i;
+        // console.log(copy.items, title);
+        for (i = 0; i < copy.length; i += 1) {
+          if (copy[i].id == title) {
+            copy[i].name = current;
+          }
+        }
+        // console.log(copy);
+        dbRef.doc("sidebar").set({ items: copy });
+        setTitle(current);
+      });
   };
 
   switch (specialVal) {
@@ -102,24 +114,23 @@ function SidebarItem({
                 modify(res.data().data);
               });
             setSongID(title);
+            setTitle(name);
           }}
           button
           dense
           {...rest}
         >
-          <ListItemText>
+          <ListItemText {...rest}>
             <span className="iconListItem">
               <LibraryMusicIcon
                 style={{ fontSize: 16, paddingRight: 5 }}
               ></LibraryMusicIcon>
               <Editable
                 text={text}
-                // editButton
                 editControls
                 placeholder="Type here"
                 cb={handleTextUpdate}
               />
-
               {/* <span>{name}</span> */}
             </span>
           </ListItemText>
@@ -140,6 +151,7 @@ function Sidebar(props) {
             dbRef={props.dbRef}
             specialVal={sidebarItem.name}
             setSongID={props.setSongID}
+            setTitle={props.setTitle}
             {...sidebarItem}
           />
         ))}

@@ -11,6 +11,9 @@ import "firebase/firestore";
 import "firebase/auth";
 import firebaseConfig from "./firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { default as EditableTitle } from "react-editable-title";
+
 import {
   useCollectionData,
   useDocumentData,
@@ -51,6 +54,7 @@ function App() {
   const [value, setValue] = useState(startingVal);
   const [currSongID, setCurrSongID] = useState("");
   const [rhymeWords, setrhymeWords] = useState("");
+  const [title, setTitle] = useState("Untitled");
   let reset = () => {
     db.collection(user.uid)
       .doc("sidebar")
@@ -81,7 +85,6 @@ function App() {
         })
       );
   };
-
   const renderElement = useCallback(({ attributes, children, element }) => {
     return (
       <div className="line" {...attributes}>
@@ -94,6 +97,25 @@ function App() {
   const sidebarRef = userRef.doc("sidebar");
   const [snapshot] = useCollectionData(userRef);
   const [sidebarVals] = useDocumentData(sidebarRef);
+
+  const deleteCurrentSong = () => {
+    sidebarRef.get().then((res) => {
+      let copy = res.data().items;
+      // console.log(copy);
+      let i;
+      // console.log(copy.items, title);
+      for (i = 0; i < copy.length; i += 1) {
+        if (copy[i].id == currSongID) {
+          copy.pop(i);
+        }
+      }
+      sidebarRef.set({ items: copy });
+      userRef.doc(currSongID).delete();
+      setCurrSongID("");
+      setrhymeWords("");
+    });
+  };
+
   if (user) {
     return (
       <div className="App">
@@ -105,42 +127,57 @@ function App() {
           }}
           dbRef={userRef}
           setSongID={setCurrSongID}
+          setTitle={setTitle}
         ></Sidebar>
         {currSongID ? (
-          <div className="container">
-            <div className="textEditor">
-              <Slate
-                editor={editor}
-                value={value}
-                onChange={(newValue) => {
-                  db.collection(user.uid)
-                    .doc(currSongID)
-                    .update({ data: newValue });
+          <div className="rightContainerTitle">
+            <span className="top">
+              <DeleteIcon
+                className="deleteIcon"
+                onClick={deleteCurrentSong}
+              ></DeleteIcon>
+              <h1>{title}</h1>
+            </span>
+            <div className="container">
+              <div className="textEditor">
+                <Slate
+                  editor={editor}
+                  value={value}
+                  onChange={(newValue) => {
+                    db.collection(user.uid)
+                      .doc(currSongID)
+                      .update({ data: newValue });
 
-                  if (editor.getFragment()[0] !== undefined) {
-                    let highlighted = editor.getFragment()[0].children[0].text;
-                    if (highlighted.length > 0) searchRhymes(highlighted);
-                    setValue(newValue);
-                    let i;
-                    for (i = 0; i < newValue.length; i++) {
-                      let line = newValue[i].children[0].text;
+                    if (editor.getFragment()[0] !== undefined) {
+                      let highlighted = editor.getFragment()[0].children[0]
+                        .text;
+                      if (highlighted.length > 0) searchRhymes(highlighted);
+                      setValue(newValue);
+                      let i;
+                      for (i = 0; i < newValue.length; i++) {
+                        let line = newValue[i].children[0].text;
+                      }
                     }
-                  }
-                }}
-              >
-                <Editable renderElement={renderElement} />
-              </Slate>
+                  }}
+                >
+                  <Editable renderElement={renderElement} />
+                </Slate>
+              </div>
             </div>
           </div>
         ) : (
-          <div className="container">
-            Create a document to start writing bars.
+          <div className="homepage">
+            <h1>Astro</h1>
+            <p>Click on "+ New" in the sidebar to start a new song.</p>
+            <p>
+              Double click on the name in the sidebar to edit the name of the
+              song.
+            </p>
           </div>
         )}
         <div contentEditable={false} className="rhymeContainer">
           {rhymeWords}
         </div>
-        )
       </div>
     );
   } else {

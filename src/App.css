@@ -61,12 +61,22 @@
 }
 
 .container {
-  padding: 3em 1em 3em 3em;
   display: flex;
   flex-grow: 1;
   /* flex-direction: row; */
   flex-wrap: nowrap;
   overflow: scroll;
+}
+.homepage {
+  padding: 3em 1em 3em 3em;
+  overflow: scroll;
+  text-align: left;
+}
+.rightContainerTitle {
+  padding: 3em 1em 3em 3em;
+  width: 100%;
+  display: inline;
+  text-align: left;
 }
 
 *:focus {
@@ -190,7 +200,7 @@ a {
   /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); */
   flex-grow: 1.5;
   background-color: white;
-  padding: 1em;
+  padding: 0em 1em 1em 1em;
   text-align: left;
   line-height: 1.6;
 }
@@ -247,4 +257,19 @@ a {
 
 .titleLeft {
   display: none;
+}
+.top {
+  display: flex;
+  align-items: center;
+}
+.top h1 {
+  padding-left: 0.2em;
+}
+.deleteIcon {
+  background-color: rgb(232, 232, 232);
+  padding: 0.2em;
+  border-radius: 0.2em;
+}
+.deleteIcon:hover {
+  background-color: rgb(255, 190, 190);
 }
