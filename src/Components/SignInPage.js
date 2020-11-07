@@ -13,6 +13,7 @@ if (!firebase.apps.length) {
 }
 
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
   let [username, updateUsername] = useState("");
@@ -42,7 +43,6 @@ function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
           <span className="buffalord">o</span>
         </h1>
         <div>
-          {/* <p>Welcome back!</p> */}
           <div className="signInForm">
             <input
               onKeyPress={onKeyUp}
@@ -85,6 +85,14 @@ function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
                     .then((res) => {
                       if (res.user) {
                         console.log();
+                        db.collection(res.user.uid)
+                          .doc("sidebar")
+                          .set({
+                            items: [
+                              { name: "Log Out", title: "" },
+                              { name: "New", title: "" },
+                            ],
+                          });
                       }
                     })
                     .catch((error) => {

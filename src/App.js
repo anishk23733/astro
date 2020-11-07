@@ -11,7 +11,10 @@ import "firebase/firestore";
 import "firebase/auth";
 import firebaseConfig from "./firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import {
+  useCollectionData,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
 
 import startingVal from "./Components/Songs/startingVal";
 
@@ -42,18 +45,23 @@ let SyllableIndicator = (children) => {
   );
 };
 
-// TODO: Similar to how the tutorial uses .add, use .add for every new song and reference it with a key, update sidebar. It's okay if the sidebar shows the keys for now.
-
 function App() {
   const editor = useMemo(() => withReact(createEditor()), []);
   const [user] = useAuthState(auth);
   const [value, setValue] = useState(startingVal);
+  const [currSongID, setCurrSongID] = useState("");
   const [rhymeWords, setrhymeWords] = useState("");
-  // const [sideBarItems, setSideBarItems] = useState([
-  //   { name: "new", title: "New" },
-  //   { name: "logout", title: "Log Out" },
-  // ]);
-
+  let reset = () => {
+    db.collection(user.uid)
+      .doc("sidebar")
+      .set({
+        items: [
+          { name: "Log Out", title: "" },
+          { name: "New", title: "" },
+        ],
+      });
+  };
+  // reset();
   const searchRhymes = async (word) => {
     axios
       .all([
@@ -82,57 +90,57 @@ function App() {
       </div>
     );
   }, []);
-
   const userRef = user ? db.collection(user.uid) : db.collection("signedout");
+  const sidebarRef = userRef.doc("sidebar");
   const [snapshot] = useCollectionData(userRef);
-  if (user && !snapshot) {
-    userRef.doc("sidebar").set({
-      items: [
-        { name: "sickoMode", title: "SICKO MODE" },
-        { name: "goosebumps", title: "goosebumps" },
-        { name: "new", title: "New" },
-        { name: "logout", title: "Log Out" },
-      ],
-    });
-  }
-
+  const [sidebarVals] = useDocumentData(sidebarRef);
   if (user) {
     return (
       <div className="App">
         <Sidebar
-          // items={sideBarItems}
-          items={snapshot == undefined ? [] : snapshot[0].items}
+          items={sidebarVals == undefined ? [] : sidebarVals.items}
           modify={(input) => {
             setValue(input);
             setrhymeWords("");
           }}
+          dbRef={userRef}
+          setSongID={setCurrSongID}
         ></Sidebar>
-        <div className="container">
-          <div className="textEditor">
-            <Slate
-              editor={editor}
-              value={value}
-              onChange={(newValue) => {
-                // console.log(JSON.stringify(newValue));
+        {currSongID ? (
+          <div className="container">
+            <div className="textEditor">
+              <Slate
+                editor={editor}
+                value={value}
+                onChange={(newValue) => {
+                  db.collection(user.uid)
+                    .doc(currSongID)
+                    .update({ data: newValue });
 
-                if (editor.getFragment()[0] !== undefined) {
-                  let highlighted = editor.getFragment()[0].children[0].text;
-                  if (highlighted.length > 0) searchRhymes(highlighted);
-                  setValue(newValue);
-                  let i;
-                  for (i = 0; i < newValue.length; i++) {
-                    let line = newValue[i].children[0].text;
+                  if (editor.getFragment()[0] !== undefined) {
+                    let highlighted = editor.getFragment()[0].children[0].text;
+                    if (highlighted.length > 0) searchRhymes(highlighted);
+                    setValue(newValue);
+                    let i;
+                    for (i = 0; i < newValue.length; i++) {
+                      let line = newValue[i].children[0].text;
+                    }
                   }
-                }
-              }}
-            >
-              <Editable renderElement={renderElement} />
-            </Slate>
+                }}
+              >
+                <Editable renderElement={renderElement} />
+              </Slate>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="container">
+            Create a document to start writing bars.
+          </div>
+        )}
         <div contentEditable={false} className="rhymeContainer">
           {rhymeWords}
         </div>
+        )
       </div>
     );
   } else {

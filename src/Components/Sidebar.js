@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -13,6 +14,7 @@ import "../App.css";
 import sickoMode from "./Songs/sickoMode";
 import goosebumps from "./Songs/goosebumps";
 import startingVal from "./Songs/startingVal";
+import Editable from "react-editable-title";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -21,24 +23,59 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-function SidebarItem({ title, modify, specialVal, ...rest }) {
+function SidebarItem({
+  name,
+  title,
+  modify,
+  dbRef,
+  setSongID,
+  specialVal,
+  ...rest
+}) {
+  const [text, setText] = useState(name);
+  const handleTextUpdate = (current) => {
+    setText(current);
+    // dbRef.doc("sidebar").update({
+    //   items: firebase.firestore.FieldValue.arrayUnion({
+    //     id: title,
+    //     name: current,
+    //   }),
+    // });
+  };
+
   switch (specialVal) {
-    case "logout":
+    case "Log Out":
       return (
         <ListItem button dense {...rest} onClick={() => auth.signOut()}>
           <ExitToAppIcon
             style={{ fontSize: 16, paddingRight: 5 }}
           ></ExitToAppIcon>
           <ListItemText>
-            <span>{title}</span>
+            <span>{name}</span>
           </ListItemText>
         </ListItem>
       );
-    case "new":
+    case "New":
       return (
         <ListItem
           onClick={() => {
-            modify(startingVal);
+            dbRef
+              .add({
+                data: startingVal,
+              })
+              .then(function (docRef) {
+                dbRef.doc("sidebar").update({
+                  items: firebase.firestore.FieldValue.arrayUnion({
+                    name: "Untitled",
+                    title: docRef.id,
+                    id: docRef.id,
+                  }),
+                });
+                setSongID(docRef.id);
+              })
+              .catch(function (error) {
+                console.error("Error adding document: ", error);
+              });
           }}
           button
           dense
@@ -49,47 +86,7 @@ function SidebarItem({ title, modify, specialVal, ...rest }) {
               <AddCircleIcon
                 style={{ fontSize: 16, paddingRight: 5 }}
               ></AddCircleIcon>
-              <span>{title}</span>
-            </span>
-          </ListItemText>
-        </ListItem>
-      );
-    case "goosebumps":
-      return (
-        <ListItem
-          onClick={() => {
-            modify(goosebumps);
-          }}
-          button
-          dense
-          {...rest}
-        >
-          <ListItemText>
-            <span className="iconListItem">
-              <LibraryMusicIcon
-                style={{ fontSize: 16, paddingRight: 5 }}
-              ></LibraryMusicIcon>
-              <span>{title}</span>
-            </span>
-          </ListItemText>
-        </ListItem>
-      );
-    case "sickoMode":
-      return (
-        <ListItem
-          onClick={() => {
-            modify(sickoMode);
-          }}
-          button
-          dense
-          {...rest}
-        >
-          <ListItemText>
-            <span className="iconListItem">
-              <LibraryMusicIcon
-                style={{ fontSize: 16, paddingRight: 5 }}
-              ></LibraryMusicIcon>
-              <span>{title}</span>
+              <span>{name}</span>
             </span>
           </ListItemText>
         </ListItem>
@@ -98,7 +95,13 @@ function SidebarItem({ title, modify, specialVal, ...rest }) {
       return (
         <ListItem
           onClick={() => {
-            modify(sickoMode);
+            dbRef
+              .doc(title)
+              .get()
+              .then((res) => {
+                modify(res.data().data);
+              });
+            setSongID(title);
           }}
           button
           dense
@@ -109,7 +112,15 @@ function SidebarItem({ title, modify, specialVal, ...rest }) {
               <LibraryMusicIcon
                 style={{ fontSize: 16, paddingRight: 5 }}
               ></LibraryMusicIcon>
-              <span>{title}</span>
+              <Editable
+                text={text}
+                // editButton
+                editControls
+                placeholder="Type here"
+                cb={handleTextUpdate}
+              />
+
+              {/* <span>{name}</span> */}
             </span>
           </ListItemText>
         </ListItem>
@@ -117,16 +128,18 @@ function SidebarItem({ title, modify, specialVal, ...rest }) {
   }
 }
 
-function Sidebar({ items, modify }) {
+function Sidebar(props) {
   return (
     <div className="sideBarContainer">
       <List disablePadding dense>
-        {items.map((sidebarItem, index) => (
+        {props.items.map((sidebarItem, index) => (
           <SidebarItem
+            name={sidebarItem.name}
             title={sidebarItem.title}
-            modify={modify}
-            key={`${sidebarItem.name}${index}`}
+            modify={props.modify}
+            dbRef={props.dbRef}
             specialVal={sidebarItem.name}
+            setSongID={props.setSongID}
             {...sidebarItem}
           />
         ))}
