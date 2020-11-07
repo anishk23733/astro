@@ -1,10 +1,5 @@
 import React from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import "../App.css";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectinData } from "react-firebase-hooks/firestore";
 import { useMemo, useState, useCallback, setErrors } from "react";
 import Logo from "../Assets/png_style.svg";
 
@@ -18,7 +13,6 @@ if (!firebase.apps.length) {
 }
 
 const auth = firebase.auth();
-const firestore = firebase.firestore();
 
 function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
   let [username, updateUsername] = useState("");

@@ -10,6 +10,18 @@
   font-family: SFCompact;
 }
 
+.loaderBox {
+  background-color: white;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: SFCompact;
+}
+
 @font-face {
   font-family: Lequire;
   src: url(Assets/lequire/Lequire.otf);
@@ -224,4 +236,9 @@ a {
   font-size: 0.5em;
   margin-bottom: 0.2em;
   margin-top: 0em;
+}
+
+.iconListItem {
+  display: flex;
+  align-items: center;
 }

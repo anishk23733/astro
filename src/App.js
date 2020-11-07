@@ -6,14 +6,14 @@ import { Slate, Editable, withReact } from "slate-react";
 import axios from "axios";
 import Sidebar from "./Components/Sidebar";
 import SignInPage from "./Components/SignInPage";
-import Logo from "./Assets/png_style.svg";
 import firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
 import firebaseConfig from "./firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectinData } from "react-firebase-hooks/firestore";
-import sickoMode from "./Components/sickoMode";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+
+import startingVal from "./Components/Songs/startingVal";
 
 const syllable = require("syllable");
 
@@ -23,7 +23,7 @@ if (!firebase.apps.length) {
 
 const auth = firebase.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-const firestore = firebase.firestore();
+const db = firebase.firestore();
 
 let SyllableIndicator = (children) => {
   let line = children.props.node.children[0].text;
@@ -40,33 +40,20 @@ let SyllableIndicator = (children) => {
   );
 };
 
-const items = [
-  // { name: "account", label: "Account" },
-  {
-    name: "songs",
-    label: "Songs",
-    items: [
-      { name: "sickoMode", label: "SICKO MODE" },
-      { name: "goosebumps", label: "goosebumps" },
-      { name: "create", label: "+ New" },
-    ],
-  },
-  { name: "logout", label: "Log Out" },
-];
-
 function App() {
   const editor = useMemo(() => withReact(createEditor()), []);
   const [user] = useAuthState(auth);
-  // const [value, setValue] = useState([
-  //   {
-  //     type: "paragraph",
-  //     children: [{ text: "Start writing here." }],
-  //   },
-  // ]);
-  const [value, setValue] = useState(sickoMode);
-
+  const [value, setValue] = useState(startingVal);
   const [rhymeWords, setrhymeWords] = useState("");
-  let searchRhymes = async (word) => {
+  const [sideBarItems, setSideBarItems] = useState([
+    { name: "new", title: "New" },
+    { name: "logout", title: "Log Out" },
+  ]);
+  // const userRef = db.collection(user.uid);
+  // const [snapshot] = useCollectionData(userRef);
+  // console.log(snapshot);
+
+  const searchRhymes = async (word) => {
     axios
       .all([
         axios.get(`https://api.datamuse.com/words?rel_rhy=${word}`),
@@ -74,7 +61,6 @@ function App() {
       ])
       .then(
         axios.spread((res1, res2) => {
-          // let data = res1.data.concat(res2.data);
           let elems = [];
           res1.data.forEach((wordSet) => {
             elems.push(<div className="rhymeWord">{wordSet.word}</div>);
@@ -99,22 +85,29 @@ function App() {
   if (user) {
     return (
       <div className="App">
-        <Sidebar items={items}></Sidebar>
+        <Sidebar
+          // items={sideBarItems}
+          items={sideBarItems}
+          modify={(input) => {
+            setValue(input);
+            setrhymeWords("");
+          }}
+        ></Sidebar>
         <div className="container">
           <div className="textEditor">
             <Slate
               editor={editor}
               value={value}
               onChange={(newValue) => {
+                // console.log(JSON.stringify(newValue));
+
                 if (editor.getFragment()[0] !== undefined) {
                   let highlighted = editor.getFragment()[0].children[0].text;
                   if (highlighted.length > 0) searchRhymes(highlighted);
-                  // console.log(JSON.stringify(newValue));
                   setValue(newValue);
                   let i;
                   for (i = 0; i < newValue.length; i++) {
                     let line = newValue[i].children[0].text;
-                    console.log(syllable(line), line);
                   }
                 }
               }}
