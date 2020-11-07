@@ -31,7 +31,9 @@ let SyllableIndicator = (children) => {
   let outcome = line === "break";
   return (
     <span
-      className={outcome ? "emptyLine" : "syllables"}
+      className={
+        outcome ? "emptyLine" : line.startsWith("#") ? "titleLeft" : "syllables"
+      }
       data-slate-editor
       contentEditable={false}
     >
@@ -40,18 +42,17 @@ let SyllableIndicator = (children) => {
   );
 };
 
+// TODO: Similar to how the tutorial uses .add, use .add for every new song and reference it with a key, update sidebar. It's okay if the sidebar shows the keys for now.
+
 function App() {
   const editor = useMemo(() => withReact(createEditor()), []);
   const [user] = useAuthState(auth);
   const [value, setValue] = useState(startingVal);
   const [rhymeWords, setrhymeWords] = useState("");
-  const [sideBarItems, setSideBarItems] = useState([
-    { name: "new", title: "New" },
-    { name: "logout", title: "Log Out" },
-  ]);
-  // const userRef = db.collection(user.uid);
-  // const [snapshot] = useCollectionData(userRef);
-  // console.log(snapshot);
+  // const [sideBarItems, setSideBarItems] = useState([
+  //   { name: "new", title: "New" },
+  //   { name: "logout", title: "Log Out" },
+  // ]);
 
   const searchRhymes = async (word) => {
     axios
@@ -82,12 +83,25 @@ function App() {
     );
   }, []);
 
+  const userRef = user ? db.collection(user.uid) : db.collection("signedout");
+  const [snapshot] = useCollectionData(userRef);
+  if (user && !snapshot) {
+    userRef.doc("sidebar").set({
+      items: [
+        { name: "sickoMode", title: "SICKO MODE" },
+        { name: "goosebumps", title: "goosebumps" },
+        { name: "new", title: "New" },
+        { name: "logout", title: "Log Out" },
+      ],
+    });
+  }
+
   if (user) {
     return (
       <div className="App">
         <Sidebar
           // items={sideBarItems}
-          items={sideBarItems}
+          items={snapshot == undefined ? [] : snapshot[0].items}
           modify={(input) => {
             setValue(input);
             setrhymeWords("");

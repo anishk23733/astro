@@ -11,6 +11,7 @@ import "firebase/auth";
 import firebaseConfig from "../firebase.config";
 import "../App.css";
 import sickoMode from "./Songs/sickoMode";
+import goosebumps from "./Songs/goosebumps";
 import startingVal from "./Songs/startingVal";
 
 if (!firebase.apps.length) {
@@ -48,6 +49,46 @@ function SidebarItem({ title, modify, specialVal, ...rest }) {
               <AddCircleIcon
                 style={{ fontSize: 16, paddingRight: 5 }}
               ></AddCircleIcon>
+              <span>{title}</span>
+            </span>
+          </ListItemText>
+        </ListItem>
+      );
+    case "goosebumps":
+      return (
+        <ListItem
+          onClick={() => {
+            modify(goosebumps);
+          }}
+          button
+          dense
+          {...rest}
+        >
+          <ListItemText>
+            <span className="iconListItem">
+              <LibraryMusicIcon
+                style={{ fontSize: 16, paddingRight: 5 }}
+              ></LibraryMusicIcon>
+              <span>{title}</span>
+            </span>
+          </ListItemText>
+        </ListItem>
+      );
+    case "sickoMode":
+      return (
+        <ListItem
+          onClick={() => {
+            modify(sickoMode);
+          }}
+          button
+          dense
+          {...rest}
+        >
+          <ListItemText>
+            <span className="iconListItem">
+              <LibraryMusicIcon
+                style={{ fontSize: 16, paddingRight: 5 }}
+              ></LibraryMusicIcon>
               <span>{title}</span>
             </span>
           </ListItemText>
