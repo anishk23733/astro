@@ -84,6 +84,8 @@ function SidebarItem({
                   }),
                 });
                 setSongID(docRef.id);
+                setTitle("Untitled");
+                modify(startingVal);
               })
               .catch(function (error) {
                 console.error("Error adding document: ", error);
@@ -112,7 +114,8 @@ function SidebarItem({
               .get()
               .then((res) => {
                 modify(res.data().data);
-              });
+              })
+              .catch(console.log);
             setSongID(title);
             setTitle(name);
           }}
