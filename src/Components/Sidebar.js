@@ -55,37 +55,70 @@ function SidebarItem({
       });
   };
 
-  switch (specialVal) {
-    case "Log Out":
-      return (
-        <ListItem button dense {...rest} onClick={() => auth.signOut()}>
+  return (
+    <ListItem
+      onClick={() => {
+        dbRef
+          .doc(title)
+          .get()
+          .then((res) => {
+            modify(res.data().data);
+          })
+          .catch(console.log);
+        setSongID(title);
+        setTitle(name);
+      }}
+      button
+      dense
+      {...rest}
+    >
+      <ListItemText {...rest}>
+        <span className="iconListItem">
+          <LibraryMusicIcon
+            style={{ fontSize: 16, paddingRight: 5 }}
+          ></LibraryMusicIcon>
+          <Editable
+            text={text}
+            editControls
+            placeholder="Type here"
+            cb={handleTextUpdate}
+          />
+          {/* <span>{name}</span> */}
+        </span>
+      </ListItemText>
+    </ListItem>
+  );
+}
+
+function Sidebar(props) {
+  return (
+    <div className="sideBarContainer">
+      <List disablePadding dense>
+        <ListItem button dense onClick={() => auth.signOut()}>
           <ExitToAppIcon
             style={{ fontSize: 16, paddingRight: 5 }}
           ></ExitToAppIcon>
           <ListItemText>
-            <span>{name}</span>
+            <span>Logout</span>
           </ListItemText>
         </ListItem>
-      );
-    case "New":
-      return (
         <ListItem
           onClick={() => {
-            dbRef
+            props.dbRef
               .add({
                 data: startingVal,
               })
               .then(function (docRef) {
-                dbRef.doc("sidebar").update({
+                props.dbRef.doc("sidebar").update({
                   items: firebase.firestore.FieldValue.arrayUnion({
                     name: "Untitled",
                     title: docRef.id,
                     id: docRef.id,
                   }),
                 });
-                setSongID(docRef.id);
-                setTitle("Untitled");
-                modify(startingVal);
+                props.setSongID(docRef.id);
+                props.setTitle("Untitled");
+                props.modify(startingVal);
               })
               .catch(function (error) {
                 console.error("Error adding document: ", error);
@@ -93,59 +126,16 @@ function SidebarItem({
           }}
           button
           dense
-          {...rest}
         >
           <ListItemText>
             <span className="iconListItem">
               <AddCircleIcon
                 style={{ fontSize: 16, paddingRight: 5 }}
               ></AddCircleIcon>
-              <span>{name}</span>
+              <span>New</span>
             </span>
           </ListItemText>
         </ListItem>
-      );
-    default:
-      return (
-        <ListItem
-          onClick={() => {
-            dbRef
-              .doc(title)
-              .get()
-              .then((res) => {
-                modify(res.data().data);
-              })
-              .catch(console.log);
-            setSongID(title);
-            setTitle(name);
-          }}
-          button
-          dense
-          {...rest}
-        >
-          <ListItemText {...rest}>
-            <span className="iconListItem">
-              <LibraryMusicIcon
-                style={{ fontSize: 16, paddingRight: 5 }}
-              ></LibraryMusicIcon>
-              <Editable
-                text={text}
-                editControls
-                placeholder="Type here"
-                cb={handleTextUpdate}
-              />
-              {/* <span>{name}</span> */}
-            </span>
-          </ListItemText>
-        </ListItem>
-      );
-  }
-}
-
-function Sidebar(props) {
-  return (
-    <div className="sideBarContainer">
-      <List disablePadding dense>
         {props.items.map((sidebarItem, index) => (
           <SidebarItem
             name={sidebarItem.name}

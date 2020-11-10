@@ -53,8 +53,8 @@
 .sideBarContainer {
   background-color: rgb(250, 250, 250);
   height: 100vh;
-  min-width: 12.5em;
-  max-width: 12.5em;
+  min-width: 14em;
+  max-width: 14em;
   overflow: hidden;
   /* padding-top: 7.5vh; */
   padding-top: 3em;

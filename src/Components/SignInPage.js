@@ -85,14 +85,9 @@ function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
                     .then((res) => {
                       if (res.user) {
                         console.log();
-                        db.collection(res.user.uid)
-                          .doc("sidebar")
-                          .set({
-                            items: [
-                              { name: "Log Out", title: "" },
-                              { name: "New", title: "" },
-                            ],
-                          });
+                        db.collection(res.user.uid).doc("sidebar").set({
+                          items: [],
+                        });
                       }
                     })
                     .catch((error) => {
