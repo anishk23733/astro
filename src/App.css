@@ -77,6 +77,34 @@
   width: 100%;
   display: inline;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.beatLink {
+  width: 100%;
+}
+.beatLink input {
+  width: 90%;
+  padding: 0.7em;
+  border: 1px solid rgb(68, 68, 68);
+  border-radius: 0.25em;
+}
+.beatLink button {
+  border: 20px;
+  padding: 0.75em;
+  margin: 0.5em;
+  border-radius: 0.25em;
+  transition: background-color 0.3s linear, transform 0.3s linear,
+    box-shadow 0.3s linear;
+  font-family: SFCompact;
+  background-image: linear-gradient(120deg, #fd3a84 0%, #ffa68d 100%);
+  color: #fff;
+  text-transform: uppercase;
+}
+.beatLink button:hover {
+  box-shadow: 0 1rem 2rem rgba(255, 21, 21, 0.19),
+    0 0.6rem 0.6rem rgba(255, 21, 21, 0.23);
+  transform: translateY(-0.1rem);
 }
 
 *:focus {

@@ -55,6 +55,8 @@ function App() {
   const [currSongID, setCurrSongID] = useState("");
   const [rhymeWords, setrhymeWords] = useState("");
   const [title, setTitle] = useState("Untitled");
+  // const [source, setSourceLink] = useState("");
+
   let reset = () => {
     db.collection(user.uid)
       .doc("sidebar")
@@ -164,6 +166,32 @@ function App() {
                 </Slate>
               </div>
             </div>
+            {/* <div className="beatLink">
+              <input
+                type="text"
+                placeholder="Enter beat or instrumental URL"
+                onChange={(event) => setSourceLink(event.target.value)}
+              ></input>
+              <span>
+                <button
+                  onClick={() => {
+                    // const options = ["--username=user", "--password=hunter2"];
+                    // youtubedl.getInfo(source, options, function (err, info) {
+                    //   if (err) throw err;
+                    //   console.log("id:", info.id);
+                    //   console.log("title:", info.title);
+                    //   console.log("url:", info.url);
+                    //   console.log("thumbnail:", info.thumbnail);
+                    //   console.log("description:", info.description);
+                    //   console.log("filename:", info._filename);
+                    //   console.log("format id:", info.format_id);
+                    // });
+                  }}
+                >
+                  Update
+                </button>
+              </span>
+            </div> */}
           </div>
         ) : (
           <div className="homepage">
