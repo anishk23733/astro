@@ -134,7 +134,14 @@ function Sidebar(props) {
         <CssBaseline />
 
         <List disablePadding dense>
-          <ListItem button dense onClick={() => props.setSongID("")}>
+          <ListItem
+            button
+            dense
+            onClick={() => {
+              props.modify("");
+              props.setSongID("");
+            }}
+          >
             <PersonIcon style={{ fontSize: 20, paddingRight: 5 }}></PersonIcon>
             <ListItemText>
               <span>Account</span>
