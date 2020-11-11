@@ -35,7 +35,7 @@ function SignInPage({ label, items, depthStep = 10, depth = 0, ...rest }) {
   };
   return (
     <div className="signInPage">
-      <div className="signInContainer">
+      <div className="signInContainer not-selectable">
         <img className="signInLogo" src={Logo}></img>
         <h1>
           <span className="buffalord">as</span>

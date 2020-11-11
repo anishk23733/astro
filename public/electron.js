@@ -104,7 +104,11 @@ function createMenu() {
 
 app.on("ready", () => {
   createWindow();
-  createMenu();
+  if (process.platform === "darwin") {
+    createMenu();
+  } else {
+    Menu.setApplicationMenu(null);
+  }
 });
 
 app.on("window-all-closed", () => {

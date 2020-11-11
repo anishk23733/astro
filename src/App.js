@@ -135,10 +135,11 @@ function App() {
           <div className="rightContainerTitle">
             <span className="top">
               <DeleteIcon
+                style={{ fontSize: 30 }}
                 className="deleteIcon"
                 onClick={deleteCurrentSong}
               ></DeleteIcon>
-              <h1>{title}</h1>
+              <h1 className="songTitle">{title}</h1>
             </span>
             <div className="container">
               <div className="textEditor">
@@ -166,35 +167,9 @@ function App() {
                 </Slate>
               </div>
             </div>
-            {/* <div className="beatLink">
-              <input
-                type="text"
-                placeholder="Enter beat or instrumental URL"
-                onChange={(event) => setSourceLink(event.target.value)}
-              ></input>
-              <span>
-                <button
-                  onClick={() => {
-                    // const options = ["--username=user", "--password=hunter2"];
-                    // youtubedl.getInfo(source, options, function (err, info) {
-                    //   if (err) throw err;
-                    //   console.log("id:", info.id);
-                    //   console.log("title:", info.title);
-                    //   console.log("url:", info.url);
-                    //   console.log("thumbnail:", info.thumbnail);
-                    //   console.log("description:", info.description);
-                    //   console.log("filename:", info._filename);
-                    //   console.log("format id:", info.format_id);
-                    // });
-                  }}
-                >
-                  Update
-                </button>
-              </span>
-            </div> */}
           </div>
         ) : (
-          <div className="homepage">
+          <div className="homepage not-selectable">
             <h1>Astro</h1>
             <p>Click on "+ New" in the sidebar to start a new song.</p>
             <p>

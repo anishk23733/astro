@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
   background-color: white;
   min-height: 100vh;
   max-height: 100vh;
@@ -31,6 +30,10 @@
   src: url(Assets/SF_Compact/SFCompactText-Regular.otf);
 }
 @font-face {
+  font-family: SFCompactLight;
+  src: url(Assets/SF_Compact/SFCompactText-Light.otf);
+}
+@font-face {
   font-family: BuffalordGradient;
   src: url(Assets/buffalord/BuffalordDemoGradient.ttf);
 }
@@ -38,8 +41,10 @@
   font-family: Buffalord;
   src: url(Assets/buffalord/BuffalordDemoRegular.ttf);
 }
-.lequire {
-  font-family: Lequire;
+
+* {
+  font-family: SFCompact;
+  /* font-size: 16px; */
 }
 .buffalord {
   font-family: Buffalord;
@@ -51,7 +56,8 @@
 }
 
 .sideBarContainer {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
+  border-right: 1px solid rgb(216, 216, 216);
   height: 100vh;
   min-width: 14em;
   max-width: 14em;
@@ -71,6 +77,12 @@
   padding: 3em 1em 3em 3em;
   overflow: scroll;
   text-align: left;
+}
+.homepage h1 {
+  font-family: SFCompactLight;
+}
+.songTitle {
+  font-family: SFCompactLight;
 }
 .rightContainerTitle {
   padding: 3em 1em 3em 3em;
@@ -126,7 +138,7 @@
   max-width: 25em;
   margin: auto;
   margin-top: 10vh;
-  padding: 4rem;
+  padding: 2rem;
   border-radius: 0.5rem;
 }
 .signInForm {
@@ -198,9 +210,20 @@ a {
   max-width: 30%;
   text-align: left;
   /* max-height: 77.5vh; */
-  margin-left: auto;
   overflow: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
   /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), w0 3px 6px rgba(0, 0, 0, 0.23); */
+}
+
+.rhymeContainer div {
+  flex-grow: 1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 3em;
 }
 
 ::-webkit-scrollbar {
@@ -208,16 +231,16 @@ a {
 }
 
 .rhymeWord {
-  border: 1px solid rgb(137, 255, 170);
-  background-color: rgb(242, 255, 247);
+  border: 1px solid rgb(0, 255, 110);
+  background-color: rgba(0, 255, 110, 0.1);
   padding: 0.4em;
   display: inline-block;
   border-radius: 0.2em;
   margin: 0.2em;
 }
 .rhymeWordNear {
-  border: 1px solid rgb(255, 137, 137);
-  background-color: rgb(255, 242, 242);
+  border: 1px solid rgb(255, 65, 54);
+  background-color: rgba(255, 64, 54, 0.1);
   padding: 0.4em;
   display: inline-block;
   border-radius: 0.2em;
@@ -243,8 +266,8 @@ a {
 }
 .syllables {
   background-color: rgb(238, 238, 238);
-  width: 1.2em; /* or whatever width you want. */
-  max-width: 1.2em; /* or whatever width you want. */
+  width: 2.4em; /* or whatever width you want. */
+  max-width: 2.4em; /* or whatever width you want. */
   display: inline-block;
   padding: 0em 0.5em 0em 0.5em;
   margin-right: 0.4em;
@@ -289,15 +312,22 @@ a {
 .top {
   display: flex;
   align-items: center;
+  /* margin-left: 1em; */
 }
 .top h1 {
   padding-left: 0.2em;
 }
 .deleteIcon {
   background-color: rgb(232, 232, 232);
-  padding: 0.2em;
+  padding: 0.15em;
   border-radius: 0.2em;
 }
 .deleteIcon:hover {
   background-color: rgb(255, 190, 190);
+}
+.not-selectable {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
