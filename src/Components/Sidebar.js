@@ -138,7 +138,7 @@ function Sidebar(props) {
             button
             dense
             onClick={() => {
-              props.modify("");
+              props.modify(startingVal);
               props.setSongID("");
             }}
           >
