@@ -1,6 +1,6 @@
 # Getting Started with Astro
 
-The official project page can be found [here](https://anishkachinthaya.ml/html/astro.html).
+The official project page can be found [here](https://anishk.ml/html/astro.html).
 
 ## Available Scripts
 
@@ -28,4 +28,4 @@ Builds the app for distribution to the `dist` folder. It correctly bundles React
 
 ## Learn More
 
-You can learn more in the [Official Project Page](https://anishkachinthaya.ml/html/astro.html).
+You can learn more in the [Official Project Page](https://anishk.ml/html/astro.html).
