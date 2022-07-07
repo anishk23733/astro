@@ -1,6 +1,6 @@
 # Getting Started with Astro
 
-The official project page can be found [here](https://anishk.ml/html/astro.html).
+The official project page can be found [here](https://anishk.ml/astro/). Visit a live version of the site at [astro.anishkachinthaya.com](https://astro.anishkachinthaya.com/). 
 
 ## Available Scripts
 
